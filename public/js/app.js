@@ -21,7 +21,32 @@ import coroutine from 'coroutine'
 // b - add extend, remove query
 // c - get rid of button
 
-const extend = (...args) =>{
+const createElement = (tag='div', textContent = "") => extend(document.createElement(tag), {textContent})
+const toggleClass = (el, addRemove, ...classNames) => el.classList[addRemove](...classNames)
+
+const createNotificationQueue = coroutine(function*({toKeep = 5}={}) {
+	const queue = [];
+	const notificationsContainer = createElement('ol');
+	document.body.appendChild(notificationsContainer)
+	toggleClass(notificationsContainer, 'add', 'notifications', 'hidden')
+
+	while(true) {
+		queue.push(yield)
+		if(queue.length > toKeep)
+			queue.shift();
+		showQueue(notificationsContainer, queue);
+	}
+
+});
+
+const resultsPrinter = createNotificationQueue()
+document.querySelector('input').addEventListener('keyup', ({which, target: {value}}) => {
+	if(which == 13)
+		resultsPrinter.next(value)
+})
+
+/////////////////////////////////////////////////////
+function extend(...args) {
 	const [first, second, ...rest] = args;
 	if(!second && !rest.length) return first;
 	for(let key in second )
@@ -29,35 +54,9 @@ const extend = (...args) =>{
 	return extend(first, ...rest)
 }
 
-const createElement = (tag='div', textContent = "") => extend(document.createElement(tag), {textContent})
-const toggleClass = (el, addRemove, ...classNames) => el.classList[addRemove](...classNames)
-
-function* clickReaction({toKeep = 5}={}) {
-	const queue = [];
-	const notificationsContainer = createElement('ol');
-	document.body.appendChild(notificationsContainer)
-	toggleClass(notificationsContainer, 'add', 'notifications', 'hidden')
-
-	while(true) {
-		const msg = yield;
-		queue.push(msg)
-		if(queue.length > toKeep)
-			queue.shift();
-		showQueue();
-	}
-
-	let prevRemoval;
-	function showQueue() {
-		const listItems = queue.map((msg) => createElement('li', msg).outerHTML)
-		notificationsContainer.innerHTML = listItems.join('')
-		toggleClass(notificationsContainer, 'remove', 'hidden')
-		setTimeout(()=>toggleClass(notificationsContainer, 'add', 'hidden'), 1);
-	}
+function showQueue(notificationsContainer, queue) {
+	const listItems = queue.map((msg) => createElement('li', msg).outerHTML)
+	notificationsContainer.innerHTML = listItems.join('')
+	toggleClass(notificationsContainer, 'remove', 'hidden')
+	setTimeout(()=>toggleClass(notificationsContainer, 'add', 'hidden'), 10);
 }
-
-const createNotificationQueue = () => coroutine(clickReaction)()
-const resultsPrinter = createNotificationQueue()
-document.querySelector('input').addEventListener('keyup', ({which, target: {value}}) => {
-	if(which == 13)
-		resultsPrinter.next(value)
-})
