@@ -2,20 +2,45 @@ import $ from 'jquery'
 import coroutine from 'coroutine'
 
 //Things to demo:
-// modules, Generators, simple object construction, object destructuring in parameters, array destructructuring, single line arrow function, default parameters, json objects, hoisting? first order functions, splat, spread
+// [ ]	simple object construction
+// [a]	object destructuring in parameters
+// [a]	single line arrow function
+// [b]	spread
+// [ ]	boolean type coercion
+// [ ]	||, && coercion
+// [ ]	array destructructuring
+// [a]	default parameters
+// [ ]	first order functions
+// [a]	hoisting 
+// [ ]	json objects
+// [b]	splat
+// [a]	modules
+// [a]	Generators
 
-
-function* clickReaction() {
-	var count = 1;
+function* clickReaction({toKeep = 5}={}) {
+	const queue = [];
+	const $notificationsContainer = $('<ol class="notifications">').appendTo('body');
 	while(true) {
-		const res = yield
-		console.log("click ", count++, res);
+		const msg = yield;
+		queue.push(msg)
+		if(queue.length > toKeep)
+			queue.shift();
+		showQueue();
+	}
+
+	let prevRemoval;
+	function showQueue() {
+		var $listItems = queue
+							.map((msg) => $('<li>').text(msg))
+							.reduce(($set, $el) => $set.add($el), $());
+		$notificationsContainer.empty().append($listItems).removeClass('hidden', false);
+		setTimeout(()=>$notificationsContainer.addClass('hidden'), 0);
 	}
 }
 
-const resultsPrinter = coroutine(clickReaction)()
-$('button').on('click', ({target: { value }}) =>
-	resultsPrinter.next(value)
+const createNotifiationQueue = () => coroutine(clickReaction)()
+const resultsPrinter = createNotifiationQueue()
+let counter = 1;
+$('button').on('click', () =>
+	resultsPrinter.next("Welcome to message " + (counter++))
 )
-
-export default null;

@@ -1,3 +1,33 @@
+<style>
+.notifications {
+	display: inline-block;
+	opacity: 1;
+	max-height: 1000em;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	position: fixed;
+	right: 10px;
+	top: 10px;
+	list-style-type: decimal;
+}
+.notifications.hidden:hover {
+	opacity: 1;
+	max-height: 1000em;
+}
+.hidden {
+	opacity: 0;
+	max-height: 0em;
+	transition: opacity 2s, max-height 0s linear 2s;
+}
+.notifications li {
+	border: 2px solid #888;
+	background-color: aliceblue;
+	border-radius: 15px;
+	padding: 10px;
+	margin: 5px 0;
+}
+</style>
 <button>Click here to send new message</button>
 
 <script src="/js/jspm_packages/system.js"></script>
