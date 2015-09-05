@@ -1,4 +1,3 @@
-import $ from 'jquery'
 import coroutine from 'coroutine'
 
 //Things to demo:
@@ -6,20 +5,38 @@ import coroutine from 'coroutine'
 // [a]	object destructuring in parameters
 // [a]	single line arrow function
 // [b]	spread
-// [ ]	boolean type coercion
+// [b]	boolean type coercion
 // [ ]	||, && coercion
-// [ ]	array destructructuring
+// [b]	array destructructuring
 // [a]	default parameters
 // [ ]	first order functions
 // [a]	hoisting 
 // [ ]	json objects
 // [b]	splat
+// [b]	indexor syntax
 // [a]	modules
 // [a]	Generators
+//
+// a - initial
+// b - add extend, remove query
+
+const extend = (...args) =>{
+	const [first, second, ...rest] = args;
+	if(!second && !rest.length) return first;
+	for(let key in second )
+		first[key] = second[key]
+	return extend(first, ...rest)
+}
+
+const createElement = (tag='div', textContent = "") => extend(document.createElement(tag), {textContent})
+const toggleClass = (el, addRemove, ...classNames) => el.classList[addRemove](...classNames)
 
 function* clickReaction({toKeep = 5}={}) {
 	const queue = [];
-	const $notificationsContainer = $('<ol class="notifications">').appendTo('body');
+	const notificationsContainer = createElement('ol');
+	document.body.appendChild(notificationsContainer)
+	toggleClass(notificationsContainer, 'add', 'notifications', 'hidden')
+
 	while(true) {
 		const msg = yield;
 		queue.push(msg)
@@ -30,17 +47,16 @@ function* clickReaction({toKeep = 5}={}) {
 
 	let prevRemoval;
 	function showQueue() {
-		var $listItems = queue
-							.map((msg) => $('<li>').text(msg))
-							.reduce(($set, $el) => $set.add($el), $());
-		$notificationsContainer.empty().append($listItems).removeClass('hidden', false);
-		setTimeout(()=>$notificationsContainer.addClass('hidden'), 0);
+		const listItems = queue.map((msg) => createElement('li', msg).outerHTML)
+		notificationsContainer.innerHTML = listItems.join('')
+		toggleClass(notificationsContainer, 'remove', 'hidden')
+		setTimeout(()=>toggleClass(notificationsContainer, 'add', 'hidden'), 0);
 	}
 }
 
-const createNotifiationQueue = () => coroutine(clickReaction)()
-const resultsPrinter = createNotifiationQueue()
+const createNotificationQueue = () => coroutine(clickReaction)()
+const resultsPrinter = createNotificationQueue()
 let counter = 1;
-$('button').on('click', () =>
+document.querySelector('button').addEventListener('click', () =>
 	resultsPrinter.next("Welcome to message " + (counter++))
 )
