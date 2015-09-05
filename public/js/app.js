@@ -56,7 +56,7 @@ function* clickReaction({toKeep = 5}={}) {
 
 const createNotificationQueue = () => coroutine(clickReaction)()
 const resultsPrinter = createNotificationQueue()
-let counter = 1;
-document.querySelector('button').addEventListener('click', () =>
-	resultsPrinter.next("Welcome to message " + (counter++))
-)
+document.querySelector('input').addEventListener('keyup', ({which, target: {value}}) => {
+	if(which == 13)
+		resultsPrinter.next(value)
+})

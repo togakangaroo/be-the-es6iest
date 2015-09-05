@@ -27,8 +27,28 @@
 	padding: 10px;
 	margin: 5px 0;
 }
+label {
+	display: flex;
+	flex-direction: column;
+	margin: auto;
+}
+.label {
+	font-size: 160%;
+	margin-bottom: .5em;
+}
+input {
+	line-height: 1.6em;
+	padding: 5px;
+	font-size: 160%;
+}
+body {
+	display: flex;
+}
 </style>
-<button>Click here to send new message</button>
+<label>
+	<span class="label">Type a message and press enter to show it</span>
+	<input value="Welcome to message" autofocus>
+</label>
 
 <script src="/js/jspm_packages/system.js"></script>
 <script src="/js/config.js"></script>
