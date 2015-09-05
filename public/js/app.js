@@ -19,6 +19,7 @@ import coroutine from 'coroutine'
 //
 // a - initial
 // b - add extend, remove query
+// c - get rid of button
 
 const extend = (...args) =>{
 	const [first, second, ...rest] = args;
@@ -50,7 +51,7 @@ function* clickReaction({toKeep = 5}={}) {
 		const listItems = queue.map((msg) => createElement('li', msg).outerHTML)
 		notificationsContainer.innerHTML = listItems.join('')
 		toggleClass(notificationsContainer, 'remove', 'hidden')
-		setTimeout(()=>toggleClass(notificationsContainer, 'add', 'hidden'), 0);
+		setTimeout(()=>toggleClass(notificationsContainer, 'add', 'hidden'), 1);
 	}
 }
 
