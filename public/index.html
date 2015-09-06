@@ -18,7 +18,7 @@
 .hidden {
 	opacity: 0;
 	max-height: 0em;
-	transition: opacity 4s, max-height 0s linear 4s;
+	transition: opacity 2s linear 4s, max-height 0s linear 6s;
 }
 .notifications li {
 	border: 2px solid #888;
@@ -30,13 +30,16 @@
 label {
 	display: flex;
 	flex-direction: column;
-	margin: auto;
+	margin-bottom: 20px;
 }
 .label {
 	font-size: 160%;
 	margin-bottom: .5em;
 }
 input {
+	flex: 1;
+}
+input, button {
 	line-height: 1.6em;
 	padding: 5px;
 	font-size: 160%;
@@ -44,11 +47,28 @@ input {
 body {
 	display: flex;
 }
+.input-button {
+	display: flex;
+	width: 100%;
+}
+main, form {
+	display: flex;
+	flex-direction: column;
+	margin: auto;
+}
 </style>
-<label>
-	<span class="label">Type a message and press enter to show it</span>
-	<input value="Welcome to message" autofocus>
-</label>
+<main>
+	<form>
+		<label>
+			<span class="label">Type a message and press enter to show it</span>
+			<div class="input-button">
+				<input name="message" value="Welcome to this message" autofocus>
+				<button type="submit">Go</button>
+			</div>
+		</label>
+		<button type="reset">Clear Queue</button>
+	</form>
+</main>
 
 <script src="/js/jspm_packages/system.js"></script>
 <script src="/js/config.js"></script>
