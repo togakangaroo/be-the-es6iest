@@ -1,49 +1,82 @@
+import bluebird from 'bluebird'
+
 //Things to demo:
-// [ ]	simple object construction
+// [e]	simple object construction
 // [a]	object destructuring in parameters
 // [a]	single line arrow function
 // [b]	spread
 // [b]	boolean type coercion
-// [ ]	||, && coercion
+// [e]	||, && coercion
 // [b]	array destructructuring
 // [a]	default parameters
-// [ ]	first order functions
+// [e]	first order functions
 // [a]	hoisting 
 // [d]	json objects
 // [b]	splat
 // [b]	indexor syntax
 // [a]	modules
-// [ ]	Generators
+// [e]	Generators
 //
 // a - initial
 // b - add extend, remove query
 // c - get rid of button
 // d - no generators, objects, form
+// e - storage functions
 
 const createElement = (tag='div', textContent = "") => extend(document.createElement(tag), {textContent})
 const toggleClass = (el, addRemove, ...classNames) => el.classList[addRemove](...classNames)
 
-const createNotificationQueue = function({toKeep = 5}={}) {
+const asAsync = (...args) => Promise.resolve(...args)
+const none = {
+	get: ( () => asAsync([]) ),
+	save: ( () => asAsync() ),
+}
+const local = {
+	get: ( () => asAsync( JSON.parse( localStorage.getItem('notifications') )||[] ) ),
+	save: ( (notifications) => asAsync( localStorage.setItem('notifications', JSON.stringify(notifications)) ) )
+}
+const storage = { none, local}
+
+
+const createNotificationQueue = function({toKeep = 5, store = storage.none }={}) {
 	let queue = [];
 	const notificationsContainer = createElement('ol');
 	document.body.appendChild(notificationsContainer)
 	toggleClass(notificationsContainer, 'add', 'notifications', 'hidden')
+
+	const save = () => store.save(queue).then(()=> console.log("saved"));
+
+	bluebird.coroutine(function* loadStoredNotifications(){
+		queue = yield store.get()
+		showQueue()
+	})()
 
 	return {
 		add(msg) {
 			queue = [...queue, msg];
 			if(queue.length > toKeep)
 				queue = queue.slice(1);
-			showQueue(notificationsContainer, queue);
+			showQueue();
+			save();
 		},
 		clear() {
 			queue = [];
-			showQueue(notificationsContainer, queue);
+			showQueue();
+			save();
 		},
 	};
-};
 
-const notifications = createNotificationQueue({toKeep: 3})
+	////////////////////////
+	function showQueue() {
+		const listItems = queue.map((msg) => createElement('li', msg).outerHTML)
+		notificationsContainer.innerHTML = listItems.join('')
+		toggleClass(notificationsContainer, 'remove', 'hidden')
+		setTimeout(()=>toggleClass(notificationsContainer, 'add', 'hidden'), 10);
+	}
+};
+createNotificationQueue.storage = storage
+
+const notifications = createNotificationQueue({store: storage.local})
 let counter = 1;
 on('form', 'submit', preventDefault((e) => {
 	const value = e.target.querySelector('input').value
@@ -72,11 +105,3 @@ function extend(...args) {
 	return extend(first, ...rest)
 }
 
-function showQueue(notificationsContainer, queue) {
-	const listItems = queue.map((msg) => createElement('li', msg).outerHTML)
-	notificationsContainer.innerHTML = listItems.join('')
-	toggleClass(notificationsContainer, 'remove', 'hidden')
-	setTimeout(()=>toggleClass(notificationsContainer, 'add', 'hidden'), 10);
-}
-
-export default null //without this file is not interpreted as a module

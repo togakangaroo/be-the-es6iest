@@ -22,7 +22,9 @@
     "directories": {
       "baseURL": "public/js"
     },
-    "dependencies": {},
+    "dependencies": {
+      "bluebird": "npm:bluebird@^2.9.34"
+    },
     "devDependencies": {
       "babel": "npm:babel-core@^5.8.22",
       "babel-runtime": "npm:babel-runtime@^5.8.20",
