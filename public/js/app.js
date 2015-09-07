@@ -1,4 +1,5 @@
 import bluebird from 'bluebird'
+import request from 'then-request'
 
 //Things to demo:
 // [e]	simple object construction
@@ -74,9 +75,17 @@ const createNotificationQueue = function({toKeep = 5, store = storage.none }={})
 		setTimeout(()=>toggleClass(notificationsContainer, 'add', 'hidden'), 10);
 	}
 };
-createNotificationQueue.storage = storage
 
-const notifications = createNotificationQueue({store: storage.local})
+createNotificationQueue.storage = storage
+createNotificationQueue.storage = storage
+const serverStore = {
+	get: ( () => request('GET', '/notifications').then((x) => JSON.parse(x.body) ) ),
+	save: ( (notifications) => 
+		request('POST', '/notifications', {json: notifications} ) 
+	),
+}
+
+const notifications = createNotificationQueue({store: serverStore })
 let counter = 1;
 on('form', 'submit', preventDefault((e) => {
 	const value = e.target.querySelector('input').value
