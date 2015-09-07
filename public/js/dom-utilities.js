@@ -14,5 +14,6 @@ export const domReady = () =>
 				} )
 			});
 
-export const createElement = () => 
+export const createElement = () => {
 	throw Error("Implement Me")
+}
