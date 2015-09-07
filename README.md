@@ -50,9 +50,8 @@
 6. create ui to show elements
 	* Implement
 		* `const container = createElement('ol')`	
-		* `toggleClass(container, 'add', 'notifications')`
 		* `document.body.appendChild(container)`
-		* `createElement` and `toggleClass`
+		* `createElement`
 		* `showNotifications`
 			* create `itemsHtml` and set container
 			* toggle `'hidden'` on/off
@@ -60,7 +59,6 @@
 		* single-line arrow functions
 		* splat parameters
 		* simple object construction
-		* json property keys
 		* default parameters
 	* Note
 		* Note that createing html this way is necessary to fix xss. This only works in this specific sceanrio
