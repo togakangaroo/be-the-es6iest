@@ -12,6 +12,7 @@
 		* multiline arrow functions
 		* importing a module
 	* Note
+		* Prewrite
 		* Not using jquery because..eh..
 		* modules so no need for IIFE scoping
 		* all this stuff so far is cool but won't make your life easier
@@ -35,6 +36,8 @@
 		* `let`
 		* spread operator into array
 		* function hoisting
+	* Note
+		* You could `push` and `shift` and `splice` but I don't like it
 5. create `extend` 
 	* Implement
 		* `extend` in `utilities` module
@@ -58,7 +61,6 @@
 			* call `showTemporarily` - already implemented
 	* Demonstrated
 		* single-line arrow functions
-		* splat parameters
 		* simple object construction
 		* default parameters
 	* Note
