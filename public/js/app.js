@@ -24,29 +24,25 @@ import request from 'then-request'
 // d - no generators, objects, form
 // e - storage functions
 
-
 const store = {
 	get: ( () => request('GET', '/notifications').then((x) => JSON.parse(x.body) ) ),
-	save: ( (notifications) => 
-		request('POST', '/notifications', {json: notifications} ) 
-	),
+	save: ( (json) => request('POST', '/notifications', {json}) ),
 }
 
-const notifications = createNotificationQueue({store: store });
+const notifications = createNotificationQueue({store});
 
 let counter = 1;
-on('form', 'submit', preventDefault((e) => {
+on('form', 'submit', (e) => {
+	e.preventDefault()
 	const value = e.target.querySelector('input').value
 	notifications.add(`${counter++}: ${value}`)	
-}))
-on('form', 'reset', preventDefault(() => notifications.clear()) )
+})
+on('form', 'reset', (e) => {
+	e.preventDefault()
+	notifications.clear()
+}) 
 
 /////////////////////////////////////////////////////
-
-function preventDefault(fn) { return (e, ...args) => {
-	e.preventDefault();
-	return fn(e, ...args);
-} }
 
 function on(selector, eventType, fn) {
 	const el = document.querySelector(selector);
