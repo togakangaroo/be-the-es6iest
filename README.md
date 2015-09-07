@@ -75,6 +75,7 @@
 8. Add in `stores`
 	* Implement
 		* import `notificationStores`
+		* export `{none, local}` in `notificationStores`
 		* add `store` to options
 		* app import customNotificationsStore
 		* set local `store`
