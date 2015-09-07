@@ -14,5 +14,5 @@ export const domReady = () =>
 				} )
 			});
 
-export const createElement = (tag, textContent="") => 
-	extend(document.createElement(tag), {textContent})
+export const createElement = () => 
+	throw Error("Implement Me")
