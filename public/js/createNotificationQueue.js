@@ -1,7 +1,7 @@
-import { extend, runCoroutine } from 'utilities'
+import { runCoroutine } from 'utilities'
 import stores from './notificationStores'
+import { createElement, showTemporarily } from './dom-utilities'
 
-const createElement = (tag, textContent="") => extend(document.createElement(tag), {textContent})
 
 const createNotificationQueue = ({
 									keepLatest = 5,
@@ -38,8 +38,7 @@ const createNotificationQueue = ({
 	function showNotifications() {
 		const itemsHtml = queue.map((msg) => createElement('li', msg).outerHTML)
 		container.innerHTML = itemsHtml.join('')
-		container.classList.remove('hidden')
-		setTimeout(() => container.classList.add('hidden'), 10)
+		showTemporarily(container)
 	}
 }
 

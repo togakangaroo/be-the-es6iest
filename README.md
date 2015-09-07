@@ -47,14 +47,15 @@
 		* spread operator into parameters
 	* Note
 		* We're going to use this soon
+		* Though honestly its not terribly necessary
 6. create ui to show elements
 	* Implement
 		* `const container = createElement('ol')`	
 		* `document.body.appendChild(container)`
-		* `createElement`
+		* `createElement` in `dom-utilities`
 		* `showNotifications`
 			* create `itemsHtml` and set container
-			* toggle `'hidden'` on/off
+			* call `showTemporarily` - already implemented
 	* Demonstrated
 		* single-line arrow functions
 		* splat parameters
@@ -62,7 +63,7 @@
 		* default parameters
 	* Note
 		* Note that createing html this way is necessary to fix xss. This only works in this specific sceanrio
-		* This is complex. I like implementing `createElement` and the innerHTML stuff but the other stuff is so complex
+		* There is not a ton of justification for using `extend` in `createElement`
 7. Add `keepLatest` option
 	* Implement 
 		* Demonstrated object destructuring
