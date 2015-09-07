@@ -1,4 +1,4 @@
-import bluebird from 'bluebird'
+import createNotificationQueue from 'createNotificationQueue'
 import request from 'then-request'
 
 //Things to demo:
@@ -24,68 +24,16 @@ import request from 'then-request'
 // d - no generators, objects, form
 // e - storage functions
 
-const createElement = (tag='div', textContent = "") => extend(document.createElement(tag), {textContent})
-const toggleClass = (el, addRemove, ...classNames) => el.classList[addRemove](...classNames)
 
-const asAsync = (...args) => Promise.resolve(...args)
-const none = {
-	get: ( () => asAsync([]) ),
-	save: ( () => asAsync() ),
-}
-const local = {
-	get: ( () => asAsync( JSON.parse( localStorage.getItem('notifications') )||[] ) ),
-	save: ( (notifications) => asAsync( localStorage.setItem('notifications', JSON.stringify(notifications)) ) )
-}
-const storage = { none, local}
-
-
-const createNotificationQueue = function({toKeep = 5, store = storage.none }={}) {
-	let queue = [];
-	const notificationsContainer = createElement('ol');
-	document.body.appendChild(notificationsContainer)
-	toggleClass(notificationsContainer, 'add', 'notifications', 'hidden')
-
-	const save = () => store.save(queue).then(()=> console.log("saved"));
-
-	bluebird.coroutine(function* loadStoredNotifications(){
-		queue = yield store.get()
-		showQueue()
-	})()
-
-	return {
-		add(msg) {
-			queue = [...queue, msg];
-			if(queue.length > toKeep)
-				queue = queue.slice(1);
-			showQueue();
-			save();
-		},
-		clear() {
-			queue = [];
-			showQueue();
-			save();
-		},
-	};
-
-	////////////////////////
-	function showQueue() {
-		const listItems = queue.map((msg) => createElement('li', msg).outerHTML)
-		notificationsContainer.innerHTML = listItems.join('')
-		toggleClass(notificationsContainer, 'remove', 'hidden')
-		setTimeout(()=>toggleClass(notificationsContainer, 'add', 'hidden'), 10);
-	}
-};
-
-createNotificationQueue.storage = storage
-createNotificationQueue.storage = storage
-const serverStore = {
+const store = {
 	get: ( () => request('GET', '/notifications').then((x) => JSON.parse(x.body) ) ),
 	save: ( (notifications) => 
 		request('POST', '/notifications', {json: notifications} ) 
 	),
 }
 
-const notifications = createNotificationQueue({store: serverStore })
+const notifications = createNotificationQueue({store: store });
+
 let counter = 1;
 on('form', 'submit', preventDefault((e) => {
 	const value = e.target.querySelector('input').value
@@ -105,12 +53,3 @@ function on(selector, eventType, fn) {
 	el.addEventListener(eventType, fn);
 	return el;
 }
-
-function extend(...args) {
-	const [first, second, ...rest] = args;
-	if(!second && !rest.length) return first;
-	for(let key in second )
-		first[key] = second[key]
-	return extend(first, ...rest)
-}
-
