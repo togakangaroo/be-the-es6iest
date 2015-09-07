@@ -1,7 +1,6 @@
 import { runCoroutine } from 'utilities'
 import stores from './notificationStores'
-import { createElement, showTemporarily } from './dom-utilities'
-
+import { createElement, showTemporarily, domReady } from './dom-utilities'
 
 const createNotificationQueue = ({
 									keepLatest = 5,
@@ -33,6 +32,7 @@ const createNotificationQueue = ({
 	////////////////
 	function* restoreSaved() {
 		queue = yield store.get()
+		yield domReady()
 		showNotifications()
 	}
 	function showNotifications() {

@@ -1,0 +1,57 @@
+.notifications {
+	display: inline-block;
+	opacity: 1;
+	max-height: 1000em;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	position: fixed;
+	right: 10px;
+	top: 10px;
+	list-style-type: decimal;
+}
+.notifications.hidden:hover {
+	opacity: 1;
+	max-height: 1000em;
+}
+.hidden {
+	opacity: 0;
+	max-height: 0em;
+	transition: opacity 2s linear 4s, max-height 0s linear 6s;
+}
+.notifications li {
+	border: 2px solid #888;
+	background-color: aliceblue;
+	border-radius: 15px;
+	padding: 10px;
+	margin: 5px 0;
+}
+label {
+	display: flex;
+	flex-direction: column;
+	margin-bottom: 20px;
+}
+.label {
+	font-size: 160%;
+	margin-bottom: .5em;
+}
+input {
+	flex: 1;
+}
+input, button {
+	line-height: 1.6em;
+	padding: 5px;
+	font-size: 160%;
+}
+body {
+	display: flex;
+}
+.input-button {
+	display: flex;
+	width: 100%;
+}
+main, form {
+	display: flex;
+	flex-direction: column;
+	margin: auto;
+}

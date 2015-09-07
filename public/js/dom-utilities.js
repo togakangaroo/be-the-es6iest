@@ -5,5 +5,14 @@ export const showTemporarily = (element) => {
 	setTimeout(() => element.classList.add('hidden'), 10)
 }
 
+export const domReady = () =>  
+	document.readyState === 'complete'
+		? Promise.resolve()
+		: new Promise(function(resolve) {
+				document.addEventListener('readystatechange', () => {
+					if(document.readyState === 'complete') resolve()
+				} )
+			});
+
 export const createElement = (tag, textContent="") => 
 	extend(document.createElement(tag), {textContent})

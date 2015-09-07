@@ -77,6 +77,8 @@
 		* app import customNotificationsStore
 		* set local `store`
 		* `runCoroutine` generator `restoreSaved` function
+			* yields to `store.get()`
+			* yields to `domReady` (already written)
 		* `store.save(queue)` in `add` and `clear`
 	* Demonstrated
 		* import
