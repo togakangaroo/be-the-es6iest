@@ -13,23 +13,20 @@ const createNotificationQueue = ({
 	runCoroutine(loadPreviousNotifications)
 
 	return {
-		clear() {
-			queue = []
-
-			store.save(queue);
-			showNotifications()
-		},
-		add(msg) {
+		clear: saveAndShow(() => queue = []),
+		add: saveAndShow((msg) => {
 			queue = [...queue, msg]
 			if(queue.length > keepLatest)
 				queue = queue.slice(1)
-
-			store.save(queue);
-			showNotifications()
-		}
+		}),
 	}
 
 	//////////////////////////////////
+	function saveAndShow(fn) { return (...args) => {
+		fn(...args)
+		store.save(queue);
+		showNotifications()
+	} }
 	function* loadPreviousNotifications() {
 		queue = yield store.get()
 		yield domReady()
