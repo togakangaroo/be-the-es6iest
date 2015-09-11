@@ -1,6 +1,8 @@
 import { showTemporarily, createElement } from './dom-utilities'
 
-const createNotificationQueue = () => {
+const createNotificationQueue = ({
+									keepLatest = 5
+								} ={}) => {
 	let queue = []
 
 	const container = createElement('ol')
@@ -15,7 +17,7 @@ const createNotificationQueue = () => {
 		},
 		add(msg) {
 			queue = [...queue, msg]
-			if(queue.length > 5)
+			if(queue.length > keepLatest)
 				queue = queue.slice(1)
 
 			showNotifications()
