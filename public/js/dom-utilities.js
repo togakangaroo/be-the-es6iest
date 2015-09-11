@@ -14,8 +14,5 @@ export const domReady = () =>
 				} )
 			});
 
-export const createElement = (tagName, textContent) => {
-	const element = document.createElement(tagName)
-	element.textContent = textContent
-	return element
-}
+export const createElement = (tagName, textContent) => 
+	extend(document.createElement(tagName), { textContent })
