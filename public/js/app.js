@@ -1,7 +1,7 @@
 import createNotificationQueue from 'createNotificationQueue'
 import store from 'customNotificationsStore'
 
-const notifications = createNotificationQueue()
+const notifications = createNotificationQueue({ store })
 
 let counter = 0;
 const form = document.querySelector('form')

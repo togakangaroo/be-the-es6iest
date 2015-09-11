@@ -10,3 +10,4 @@ export const local = {
 	save: ( (notifications) => asAsync( localStorage.setItem('notifications', JSON.stringify(notifications)) ) )
 }
 
+export { none, local }
