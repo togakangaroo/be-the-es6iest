@@ -1,6 +1,11 @@
+import { showTemporarily, createElement } from './dom-utilities'
 
 const createNotificationQueue = () => {
 	let queue = []
+
+	const container = createElement('ol')
+	container.classList.add('notifications')
+	document.body.appendChild(container)
 
 	return {
 		clear() {
@@ -19,7 +24,11 @@ const createNotificationQueue = () => {
 
 	//////////////////////////////////
 	function showNotifications() {
-		console.log("Current notifications:", queue)
+		const itemsHtml = queue.map((msg) => 
+			createElement('li', msg).outerHTML
+		)
+		container.innerHTML = itemsHtml.join('')
+		showTemporarily(container)
 	}
 
 }
