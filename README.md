@@ -1,11 +1,32 @@
+This is the repository of demo code for my talk be-the-es6iest. [You can watch a screencast of the talk here](https://youtu.be/cC8SKCnorU4)
+
+It is encouraged that you follow along with the application. To get started you will need [nodejs installed](https://chocolatey.org/packages/nodejs.install) and to clone this code. Note that none of the techniques demonstrated require nodejs in production. It is simply used as the webserver and for for [jspm](http://jspm.io/) which provides es6 features not currently supported by browsers. It is important to emphasize, that unlike tools like browserify, jspm  uses systemjs which runs entirely in the browser and *does not require a build process for the client-side*.
+
+To download web server dependencies, run
+
+    npm install
+
+from a command line inside the main project directory. You may then run
+
+    npm run jspm:install
+    
+to download the few client-side packages used (bluebird and request-then).
+
+You can start the webserver via
+
+    npm run start
+    
+I encourage you to follow along to the video and learn these techniques as a koan. You can also jump to any particular step in the tags for example
+
+    git checkout step-3
+    git checkout step-6    
+
 # Talk Outline
 
 * demo app
-* create app.js
-	* Implement
-		* no configuration object
-		* add and clear
-		* maybe not implement this at all? Have it ready to go
+	* review index.html
+	* review app.js
+	* review createNotificationsQueue
 	* Demonstrated
 		* `const`, `let`
 		* template literal
@@ -15,7 +36,7 @@
 		* Prewrite
 		* Not using jquery because..eh..
 		* modules so no need for IIFE scoping
-		* all this stuff so far is cool but won't make your life easier
+		* modules are awesome, the rest is cool but won't make life significantly easier
 * create `createNotificationQueue` shell
 	* Implement
 		* just the exported function
@@ -97,27 +118,3 @@
 	* Note
 		* We're going to use this soon
 		* Though honestly its not terribly necessary, but every bit can help
-
-//Things to demo:
-// [e]	simple object construction
-// [a]	object destructuring in parameters
-// [a]	single line arrow function
-// [b]	spread
-// [b]	boolean type coercion
-// [e]	||, && coercion
-// [b]	array destructructuring
-// [a]	default parameters
-// [e]	first order functions
-// [a]	hoisting 
-// [d]	json objects
-// [b]	splat
-// [b]	indexor syntax
-// [a]	modules
-// [e]	Generators
-//
-// a - initial
-// b - add extend, remove query
-// c - get rid of button
-// d - no generators, objects, form
-// e - storage functions
-
